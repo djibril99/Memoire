@@ -48,7 +48,7 @@ def index(request):
                         distance_max = 20 #10km
                         for notification in notifications :
                                         #distance_valide = calculer_distance(livreur.longitude , livreur.latitude , notification.postulation.livraison.longitude_depart , notification.postulation.livraison.latitude_depart)           
-                                        distance_livraison = calculer_distance(notification.postulation.livraison.longitude_arrivee , notification.postulation.livraison.latitude_arrivee , notification.postulation.livraison.longitude_depart , notification.postulation.livraison.latitude_depart)
+                                        distance_livraison = calculer_distance(notification.livraison.longitude_arrivee , notification.livraison.latitude_arrivee , notification.livraison.longitude_depart , notification.livraison.latitude_depart)
                                         
                                         if -distance_max <= distance_livraison <= distance_max :
                                                 #ajouter la notification dont la distance est inferieur a 20km a la liste des notifications
@@ -68,7 +68,7 @@ def stream_response_generator(livreur:Livreur):
     while True:
                 #recuperer la liste des livraisons dont la distance est inferieur a 10km dons les livreur de la livrasion sont null
                 notifications = Notification.objects.filter()
-                notifications = [ notification for notification in notifications if notification.postulation.livraison]
+                notifications = [ notification for notification in notifications if notification.livraison]
                 
                 livraions = [ notitfications.livraison for notitfications in notifications if notitfications.livraison.livreur == None ]
                 valide_livraisons = 0
@@ -112,17 +112,18 @@ def postuler_livraison(request , notification_id):
                         livreur = Livreur.objects.get(user=user)
                         notification = Notification.objects.get(id=notification_id)
                         notification.livreurs_postule.add(livreur)
+                       
                         """mode postulation"""
                         prix_propose = 0
                         if request.method == 'POST':
-                                prix_propose = request.POST.get('prix_propose')
+                                prix_propose = request.POST.get('prix')
                         elif request.method == 'GET':
-                                prix_propose = request.GET.get('prix_propose')
+                                prix_propose = request.GET.get('prix')
                         
-                        postulation  =  Postulation(livraison=notification.postulation.livraison , livreur=livreur , prixPropose= prix_propose)
+                        postulation  =  Postulation(livraison=notification.livraison , livreur=livreur , prixPropose= prix_propose)
                         postulation.save()
                         
-                        notification.postulation = postulation
+                        notification.postulation.add(postulation)
                         """fin mode postulation"""
                         notification.save()
                         return redirect('gestion_notifications:index')
@@ -136,8 +137,9 @@ def annuler_postule(request , notification_id):
                 if user.type_utilisateur == 'livreur':
                         livreur = Livreur.objects.get(user=user)
                         notification = Notification.objects.get(id=notification_id)
+                        
                         notification.livreurs_postule.remove(livreur)
-                        postulation = notification.postulation
+                        postulation = Postulation.objects.filter(livraison=notification.livraison , livreur=livreur).first()
                         
                         notification.postulation.remove(postulation)
                         postulation.delete()
@@ -146,6 +148,7 @@ def annuler_postule(request , notification_id):
                         return redirect('gestion_notifications:index')
                         
         return redirect('gestion_notifications:index')
+
 def accepter_postule(request , notification_id):
         notification = Notification.objects.get(id=notification_id)
         if request.method == 'POST':
@@ -193,7 +196,7 @@ def detail_notification(request, id_notification,id_utilisateur):
         try :
                 notification = Notification.objects.get(id=id_notification)
                 utilisateur = Utilisateur.objects.get(id=id_utilisateur)
-                distance = calculer_distance(notification.postulation.livraison.longitude_depart , notification.postulation.livraison.latitude_depart , notification.postulation.livraison.longitude_arrivee , notification.postulation.livraison.latitude_arrivee)
+                distance = calculer_distance(notification.livraison.longitude_depart , notification.livraison.latitude_depart , notification.livraison.longitude_arrivee , notification.livraison.latitude_arrivee)
                 data = [(distance , notification)]
                 context = {'notifications' : data,
                            'utilisateur' : utilisateur

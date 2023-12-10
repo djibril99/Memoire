@@ -39,7 +39,7 @@
                         {% for notification , adresse_depart ,adresse_arrivee in liste_livraison_en_attente %}
                         <div class="col mb-5">
                         <div class="card" style="width: 27rem;">
-                                <img class="card-img-top" src="{{ notification.postulation.livraison.marchandise.photo.url }}" alt="Card image cap">
+                                <img class="card-img-top" src="{{ notification.livraison.marchandise.photo.url }}" alt="Card image cap">
                                 <div class="card-body">
                                   <h5 class="card-title text-warning">Livraisons en attentes</h5>
                                   <hr>
@@ -49,20 +49,32 @@
                                 <hr>
                                 <form action="{% url 'gestion_notifications:choisir_livreur' notification.id %}" method="post">
                                         {% csrf_token %}
+                                       
                                         <select name="livreur_id" id="livreur" class="form-control" required placeholder="choisir un livreur">
-                                                {% for livreur in  notification.livreurs_postule.all %}
-                                                        {% if not livreur.on_mission %}
-                                                                <option value="{{livreur.id}}">{{livreur.user.prenom}} {{livreur.user.nom}}</option>
-                                                        {% endif %}
-                                                
+                                                {% for postulation in notification.postulation.all %}
+                                                    {% if not postulation.livreur.on_mission %}
+                                                        <option value="{{ postulation.livreur.id }}">
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <div class="d-flex align-items-center">
+                                                                    <img src="{{ postulation.livraison.marchandise.client.user.photo_identite.url }}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                                                                    <div class="ms-3">
+                                                                        <p class="fw-bold mb-1">{{ postulation.livraison.marchandise.client.user.prenom }} {{ postulation.livraison.marchandise.client.user.nom }}</p>
+                                                                        <p class="text-muted mb-0">{{ postulation.livraison.marchandise.client.user.telephone }}</p>
+                                                                        <p class="text-muted mb-0">{{ postulation.livraison.marchandise.description }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </option>
+                                                    {% endif %}
                                                 {% endfor %}
-                                        </select>
+                                            </select>
+                                            
                                         <input type="submit" value="choisir" class="btn btn-primary">
                                 </form>
 
 
                                 <p class="card-text text-muted">{{notification.postulation.livraison.marchandise.description }}</p>
-                                <a href="{% url 'gestion_commandes:detail_livraison' notification.postulation.livraison.id %}" class="btn btn-primary">Detail</a>
+                                <a href="{% url 'gestion_commandes:detail_livraison' notification.livraison.id %}" class="btn btn-primary">Detail</a>
                                           
                                 </div>
                               </div>

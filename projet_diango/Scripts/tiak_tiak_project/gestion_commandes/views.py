@@ -47,6 +47,26 @@ def livraison_user_connecte(request):
                 user = Utilisateur.objects.get(id=id_user)
                 if user.type_utilisateur == 'client':
                         client = Client.objects.get(user=user)
+                        """mode postulation"""
+                        liste_livraison_en_attente = [(notification , obtenir_adresse(latitude=notification.livraison.latitude_depart, longitude=notification.livraison.longitude_depart) ,obtenir_adresse(latitude=notification.livraison.latitude_arrivee, longitude=notification.livraison.longitude_arrivee) ) for notification in Notification.objects.filter(livraison__marchandise__client=client)]
+                        liste_livraison_en_cours = [(livraison , obtenir_adresse(latitude=livraison.latitude_depart, longitude=livraison.longitude_depart) ,obtenir_adresse(latitude=livraison.latitude_arrivee, longitude=livraison.longitude_arrivee) ) for livraison in Livraison.objects.filter(marchandise__client=client, etat_livraison=False).exclude(livreur=None)]
+                        liste_livraison_terminee = [(livraison , obtenir_adresse(latitude=livraison.latitude_depart, longitude=livraison.longitude_depart) ,obtenir_adresse(latitude=livraison.latitude_arrivee, longitude=livraison.longitude_arrivee) ) for livraison in Livraison.objects.filter(marchandise__client=client, etat_livraison=True)]
+                        
+                        print(liste_livraison_en_cours)
+                        print(liste_livraison_terminee)
+                        print(liste_livraison_en_attente)
+                        
+                        context = {}
+                        if len(liste_livraison_en_cours) > 0:
+                                context['liste_livraison_en_cours'] = liste_livraison_en_cours
+                        if len(liste_livraison_terminee) > 0:
+                                context['liste_livraison_terminee'] = liste_livraison_terminee
+                        if len(liste_livraison_en_attente) > 0:
+                                context['liste_livraison_en_attente'] = liste_livraison_en_attente
+                        return render(request, 'gestion_commandes/client/liste_livraison_client.html', context)
+                
+                        
+                        
                         liste_marchandise = Marchandise.objects.filter(client=client)
                         liste_livraison_en_cours= []
                         liste_livraison_terminee = []
@@ -73,6 +93,7 @@ def livraison_user_connecte(request):
                                 except Exception as e : 
                                         print(e)
                         context = {}
+                        
                         if len(liste_livraison_en_cours) > 0:
                                 context['liste_livraison_en_cours'] = liste_livraison_en_cours
                         if len(liste_livraison_terminee) > 0:
@@ -97,7 +118,9 @@ def create_livraison(request):
                         id_user = request.session['user_id']
                         user = Utilisateur.objects.get(id=id_user)   
                         client = Client.objects.get(user=user)
+                        
                         livraison = form.save(commit=True, client=client)
+                        
                         notification = Notification(livraison=livraison)
                         notification.save()
                         return redirect('gestion_commandes:mes_livraisons')
@@ -146,8 +169,8 @@ def detail_livraison(request , id_livraison):
         if not notification : 
                 return redirect('gestion_commandes:mes_livraisons')
         
-        position_depart = obtenir_adresse(latitude=Notification.postulation.livraison.latitude_depart, longitude=Notification.postulation.livraison.longitude_depart)
-        position_arrivee = obtenir_adresse(latitude=Notification.postulation.livraison.latitude_arrivee, longitude=Notification.postulation.livraison.longitude_arrivee)
+        position_depart = obtenir_adresse(latitude=notification.livraison.latitude_depart, longitude=notification.livraison.longitude_depart)
+        position_arrivee = obtenir_adresse(latitude=notification.livraison.latitude_arrivee, longitude=notification.livraison.longitude_arrivee)
         context = {
                 'notification':notification,
                 'position_depart':position_depart,

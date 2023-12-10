@@ -44,8 +44,8 @@
                                           <hr>
                                                 Arrivé : <a href=''>{{adresse_arrivee}} </a>
                                         <hr>
-                                          <p class="card-text text-muted">{{notification.postulation.livraison.marchandise.description }}</p>
-                                          <a href="{% url 'gestion_commandes:detail_livraison' notification.postulation.livraison.id %}" class="btn btn-primary">Detail</a>
+                                          <p class="card-text text-muted">{{notification.livraison.marchandise.description }}</p>
+                                          <a href="{% url 'gestion_commandes:detail_livraison' notification.livraison.id %}" class="btn btn-primary">Detail</a>
 
                                           <a href="{% url 'gestion_notifications:annuler' notification.id %}" class="m-t-10 waves-effect waves-dark btn btn-danger btn-md btn-rounded" data-abc="true">Annuler</a>
                                         </div>
