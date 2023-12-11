@@ -88,8 +88,24 @@ crossorigin="anonymous">
                             {% if livreur in notification.livreurs_postule.all %}
                             <a href="{% url 'gestion_notifications:annuler' notification.id %}" class="m-t-10 waves-effect waves-dark btn btn-danger btn-md btn-rounded" data-abc="true">Annuler</a>
                         {% else %}
+                        
+                        <form action="{% url 'gestion_notifications:postuler' notification.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputCity">Prix proposé :</label>
+                                    <input type="text" class="form-control" id="inputCity" name ="prix" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <input type="submit" class="m-t-10 waves-effect waves-dark btn btn-success btn-md btn-rounded">
+                                </div>  
+                            </div>
+                        </form>
+
+<!--
                             <a href="{% url 'gestion_notifications:postuler' notification.id %}" class="m-t-10 waves-effect waves-dark btn btn-success btn-md btn-rounded" data-abc="true">Postuler</a>
-                        {% endif %}
+-->
+                            {% endif %}
                             <br>
                             
                             <div class="row text-center m-t-20">
