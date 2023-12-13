@@ -110,7 +110,7 @@
                 /* Style pour l'image d'arrière-plan */
                 .background-image {
                         width: 100%;
-                        height: auto;
+                        height: 100vh;
                         /* Pour conserver les proportions de l'image */
                 }
 
@@ -123,7 +123,7 @@
                         /* Positionne le texte au milieu horizontalement */
                         transform: translate(-50%, -50%);
                         /* Centre le texte parfaitement */
-                        background-color: rgba(255, 255, 255, 0.537);
+                        background-color: rgba(255, 255, 255, 0.337);
                         /* Fond semi-transparent */
                         padding: 20px;
                         /* Espace intérieur autour du texte */
@@ -260,19 +260,55 @@
         </div>
         <br>
         <!--bloc de connection et d'incription-->
-        <div id="connexionInscriptionBloc">
-                <div id="connexionBloc" style="display: block;">
-                    <!-- Contenu du formulaire de connexion ici -->
-                    {% include 'connection.html' %}
-                    
+        <!-- Section: Design Block -->
+        <section class="text-center">
+                        <!-- Background image -->
+                <div class="p-5 bg-image" style="
+                        background-image: url('{% static 'image/tiaktiak.PNG' %}');
+                        background-size: cover;
+                        height: 400px;
+                        ">
+                </div>
+                <!-- Background image -->
+                
+                <div class="card mx-4 mx-md-5 shadow-5-strong" style="
+                        margin-top: -100px;
+                        background: hsla(0, 0%, 100%, 0.8);
+                        backdrop-filter: blur(30px);
+                        ">
+                        <div class="card-body py-5 px-md-5">
+                
+                        <div class="row d-flex justify-content-center">
+                        <div class="col-lg-8">
+                        <h2 class="fw-bold mb-5">Sign up now</h2>
+                        
+                        {% if messages %}
+                                <ul class="messages">
+                                        {% for message in messages %}
+                                        <li{% if message.tags %} class="text-bg-danger"{% endif %}>{{ message }}</li>
+                                        {% endfor %}
+                                </ul>
+                        {% endif %}
+                
+                <div id="connexionInscriptionBloc">
+                        <div id="connexionBloc" style="display: block; ">
+                        <!-- Contenu du formulaire de connexion ici -->
+                        {% include 'connection.html' %}
+                        
+                        </div>
+                        
+                        <div id="inscriptionBloc" style="display: none;">
+                        <!-- Contenu du formulaire d'inscription ici -->
+                        {% include 'inscription.html' %}
+                        
+                        </div>
                 </div>
                 
-                <div id="inscriptionBloc" style="display: none;">
-                    <!-- Contenu du formulaire d'inscription ici -->
-                    {% include 'inscription.html' %}
-                    
                 </div>
-            </div>
+                </div>
+                </div>
+                </div>
+        </section>
             <script>
                 // Récupérez les éléments HTML
                 const connexionBloc = document.getElementById('connexionBloc');
@@ -443,4 +479,16 @@
 
 
 
+
 </html>
+
+<style>
+        .connexionInscriptionBloc {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 50%;
+                height: 100vh;
+                background-color: #f5f5f5;
+        }
