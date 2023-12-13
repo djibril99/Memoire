@@ -138,20 +138,27 @@ def obtenir_adresse(latitude, longitude):
 
 
 def liste_livreurs(request):
-    livreurs = Livreur.objects.all()
-    liste = []  # Utilisez un dictionnaire pour stocker les adresses par ID de livreur
-
-    if livreurs:
+    
+        liste = []  # Utilisez un dictionnaire pour stocker les adresses par ID de livreur
+        livreurs = []
+        if request.method == 'POST':
+                recherche = request.POST['recherche']
+                livreurs = Livreur.objects.filter(Q(user__nom__icontains=recherche) | Q(user__prenom__icontains=recherche) | Q(user__telephone__icontains=recherche) | Q(user__email__icontains=recherche))
+        else :
+                livreurs = Livreur.objects.all()
+                
         for livreur in livreurs:
                 adresse = obtenir_adresse(livreur.latitude, livreur.longitude)        
                 liste.append((livreur, adresse))
+  
 
-    context = {
-            'liste_livreurs': liste
-    }
-        
+        context = {
+                'liste_livreurs': liste,
+                'recherche': True,
+        }
+                
 
-    return render(request, 'gestion_utilisateurs/client/liste_livreurs.html', context)
+        return render(request, 'gestion_utilisateurs/client/liste_livreurs.html', context)
 
 #////////////////////////////////////'''''""""""""""""""""""""""""""""""""""#
 #views pour les livreurs
@@ -215,18 +222,20 @@ def liste_livreur_desactive(request):
         return render(request, 'gestion_utilisateurs/admin/liste_utilisateur.html', context)   
 
 def recherche_utilisateur(request):
+        user = Utilisateur.objects.get(id=request.session['user_id'])
+        context = {'recherche': True}
         if request.method == 'POST':
                 recherche = request.POST['recherche']
                 clients = Client.objects.filter(Q(user__nom__icontains=recherche) | Q(user__prenom__icontains=recherche) | Q(user__telephone__icontains=recherche) | Q(user__email__icontains=recherche))
                 livreurs = Livreur.objects.filter(Q(user__nom__icontains=recherche) | Q(user__prenom__icontains=recherche) | Q(user__telephone__icontains=recherche) | Q(user__email__icontains=recherche))
                 resultat = list(clients) + list(livreurs)
-                context = {
-                        'listes_utilisateurs': resultat,
-                }
-                
+                if len(resultat) == 0:
+                        context['listes_utilisateurs'] = resultat
+                        
+        if user.type_utilisateur == 'admin':
                 return render(request, 'gestion_utilisateurs/admin/liste_utilisateur.html', context)
-        else:
-                return render(request, 'gestion_utilisateurs/admin/liste_utilisateur.html')
+        else :
+                return render(request, 'gestion_utilisateurs:index')
 def changer_etat_livreur(request, id):
         livreur = Livreur.objects.get(id=id)
         if livreur.actif == False:

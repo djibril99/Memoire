@@ -39,7 +39,7 @@
                         {% for notification , adresse_depart ,adresse_arrivee in liste_livraison_en_attente %}
                         <div class="col mb-5">
                         <div class="card" style="width: 27rem;">
-                                <img class="card-img-top" src="{{ notification.postulation.livraison.marchandise.photo.url }}" alt="Card image cap">
+                                <img class="card-img-top" src="{{ notification.livraison.marchandise.photo.url }}" alt="Card image cap">
                                 <div class="card-body">
                                   <h5 class="card-title text-warning">Livraisons en attentes</h5>
                                   <hr>

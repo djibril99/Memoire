@@ -2,7 +2,7 @@
 
 
             <main class="content">
-                  <div class="container p-0">
+                  <div class="container p-0" style='background:#eee; '>
               
                               <h1 class="h3 mb-3">Messages</h1>
               
@@ -11,18 +11,18 @@
                                               <!--section liste des conversations -->
                                               <div class="col-12 col-lg-5 col-xl-3 border-right">
               
-                                                      <div class="px-4 d-none d-md-block">
-                                                              <div class="d-flex align-items-center">
-                                                                        <div class="input-group ">
-                                                                              
+                                                      <div class="px-4 d-block d-md-block">
+                                                              <div class="d-flex align-items-center ">
+                                                                        
                                                                               <form action="{% url 'gestion_messages:recherche' %}" method="POST">
                                                                                       {% csrf_token %}
-                                                                                      <input type="text" class="form-control my-3" placeholder="Search..." name='recherche'>
-                                                                                      <button type="submit" class="btn btn-primary">
-                                                                                                    <i class="fas fa-search"></i>       
-                                                                                          </button>
+                                                                                        <div class="input-group">
+                                                                                                <input type="text" class="form-control " placeholder="Search..." name='recherche'>
+                                                                                                <button type="submit" class="btn btn-primary">
+                                                                                                                <i class="fas fa-search"></i>       
+                                                                                                </button>
+                                                                                        </div>
                                                                                 </form>
-                                                                      </div>
                                                               </div>
                                                       </div>
                                                       {% if conversations  %}
@@ -58,7 +58,7 @@
                                                        
 
                                                       <!--section entete message-->
-                                                      <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                                                      <div class="py-2 px-4 border-bottom d-block d-lg-block">
                                                               <div class="d-flex align-items-center py-1">
                                                                       <div class="position-relative">
                                                                         {% if user_conversation%}
@@ -175,7 +175,9 @@
 
                 <style>
 
-
+.content {
+        background:#eee; 
+}
 
 .chat-online {
     color: #34ce57

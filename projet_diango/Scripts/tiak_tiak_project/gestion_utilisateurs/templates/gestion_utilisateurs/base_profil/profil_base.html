@@ -73,15 +73,13 @@
                                 <div class="col-md-12"><label class="labels">Date de naissance</label><input type="date" class="form-control"  value="{{user.date_naissance}}" name="date_naissance"></div>
                                 <div class="col-md-12"><label class="labels">Adresse</label><input type="text" class="form-control" placeholder="adresse" value="{{user.adresse}} " name="adresse"></div>
                                 <div class="col-md-12"><label class="labels">Numero de Telephone</label><input type="number" class="form-control" placeholder="telephone" value="{{user.telephone}}" name="telephone"></div>
-                                <div class="col-md-12"><label class="labels">Actuel Mot de Passe</label><input type="text" class="form-control" placeholder="actuelle mot de passe"  value="" required name="password"></div>
                                 <div class="col-md-12"><label class="labels">Nouveau Mot de Passe</label><input type="password" class="form-control" placeholder="Nouveau mot de passe" value="" name="new_password"></div>
                                 <div class="col-md-12"><label class="labels">Confirme Mot de Passe</label><input type="password" class="form-control" placeholder="corfirmation du mot de passe" value="" name="confirm_password"></div>
+                                <div class="col-md-12"><label class="labels">Actuel Mot de Passe</label><input type="text" class="form-control" placeholder="actuelle mot de passe"  value="" required name="password"></div>
+                                
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                                <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-                            </div>
-                            <div class="mt-5 text-center"><input class="btn btn-primary profile-button" type="submit" value="Save Profile"></div>
+                            
+                            <div class="mt-5 text-center"><input class="btn btn-success " type="submit" value="Enregistrer"></div>
                         </div>
                     </div>
                     
@@ -93,7 +91,7 @@
 </div>
 <style>
         .contener {
-                background: rgb(99, 39, 120)
+                background:#eee;    
             }
             
             .form-control:focus {
@@ -101,11 +99,7 @@
                 border-color: #BA68C8
             }
             
-            .profile-button {
-                background: rgb(99, 39, 120);
-                box-shadow: none;
-                border: none
-            }
+            
             
             .profile-button:hover {
                 background: #682773
