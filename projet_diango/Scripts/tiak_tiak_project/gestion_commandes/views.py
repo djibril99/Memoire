@@ -16,6 +16,21 @@ def mes_livraisons_livreur(request):
         user = Utilisateur.objects.get(id=id_livreur)
         livreur = Livreur.objects.get(user=user)
         
+        #recuper la liste de ses livraisons postuler , terminées , en cours, 
+        
+        liste_livraison_en_cours = [(livraison , obtenir_adresse(latitude=livraison.latitude_depart, longitude=livraison.longitude_depart) ,obtenir_adresse(latitude=livraison.latitude_arrivee, longitude=livraison.longitude_arrivee) ) for livraison in Livraison.objects.filter(livreur=livreur, etat_livraison=False)]
+        liste_livraison_terminee = [(livraison , obtenir_adresse(latitude=livraison.latitude_depart, longitude=livraison.longitude_depart) ,obtenir_adresse(latitude=livraison.latitude_arrivee, longitude=livraison.longitude_arrivee) ) for livraison in Livraison.objects.filter(livreur=livreur, etat_livraison=True)]
+        liste_livraison_postulee = [(notification , obtenir_adresse(latitude=notification.livraison.latitude_depart, longitude=notification.livraison.longitude_depart) ,obtenir_adresse(latitude=notification.livraison.latitude_arrivee, longitude=notification.livraison.longitude_arrivee) ) for notification in Notification.objects.filter(postulation__livreur=livreur , livraison__livreur=None)]
+        context = {}
+        if len(liste_livraison_en_cours) > 0:
+                context['liste_livraison_en_cours'] = liste_livraison_en_cours
+        if len(liste_livraison_terminee) > 0:
+                context['liste_livraison_terminee'] = liste_livraison_terminee
+        if len(liste_livraison_postulee) > 0:
+                context['liste_livraison_postulee'] = liste_livraison_postulee
+        return render(request, 'gestion_commandes/livreur/liste_livraison_livreur.html', context)
+        
+        
         livraisons = Livraison.objects.filter(livreur=livreur)
         liste_livraison_en_cours= []
         liste_livraison_terminee = []

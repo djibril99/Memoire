@@ -13,9 +13,9 @@
 {% block content %}
         je suis dans la page mes services
         <!-- ajouter un div qui prend la hauteur de l ecran -->
-        <div class="min-vh-100">
-                <div class="container">
-                        <!--s il n y a pas de livraison  -->
+        <div class="min-vh-100" style="background-color: #f2f2f2; ">
+                <div class="container" style = "margin-top: 10px;">
+                        <!-- s il n y a pas de livraison  -->
                         {% if liste_livraison_en_cours and  liste_livraison_terminees %}
 
                         <div class="row">
@@ -29,14 +29,14 @@
                                 {%if liste_livraison_postulee%}
                                 <div class="row">
                                         <div class="col-12">
-                                                <h2 class="text-center text-danger">Colis Postulé</h2>
+                                                <h2 class="text-center text-danger">Livraisons Postulées</h2>
                                         </div>
                                 </div>
                                 <div class="row">
-                                {% for notification in liste_livraison_postulee %}
+                                {% for notification ,adresse_depart ,adresse_arrivee   in liste_livraison_postulee %}
                                 <div class="col mb-5">
                                 <div class="card" style="width: 27rem;">
-                                        <img class="card-img-top" src="{{ notification.postulation.livraison.marchandise.photo.url }}" alt="Card image cap">
+                                        <img class="card-img-top" src="{{ notification.livraison.marchandise.photo.url }}" alt="Card image cap">
                                         <div class="card-body">
                                           <h5 class="card-title text-danger">Livraison postulée</h5>
                                           <hr>
@@ -61,7 +61,7 @@
                         {%if liste_livraison_en_cours%}
                         <div class="row">
                                 <div class="col-12">
-                                        <h2 class="text-center text-danger">Colis à livrer</h2>
+                                        <h2 class="text-center text-danger">Livraisons en cours</h2>
                                 </div>
                         </div>
                         <div class="row">
@@ -70,7 +70,7 @@
                         <div class="card" style="width: 27rem;">
                                 <img class="card-img-top" src="{{ livraison.marchandise.photo.url }}" alt="Card image cap">
                                 <div class="card-body">
-                                  <h5 class="card-title text-danger">Livraison en cours</h5>
+                                  <h5 class="card-title text-warning">Livraison en cours</h5>
                                   <hr>
                                         Depart : <a href=''>{{adresse_depart}} </a>
                                   <hr>

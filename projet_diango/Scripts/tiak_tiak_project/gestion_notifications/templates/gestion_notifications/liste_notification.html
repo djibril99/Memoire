@@ -89,19 +89,14 @@ crossorigin="anonymous">
                             <a href="{% url 'gestion_notifications:annuler' notification.id %}" class="m-t-10 waves-effect waves-dark btn btn-danger btn-md btn-rounded" data-abc="true">Annuler</a>
                         {% else %}
                         
-                        <form action="{% url 'gestion_notifications:postuler' notification.id %}" method="POST">
+                        <form action="{% url 'gestion_notifications:postuler' notification.id %}" method="POST" class="form-inline">
                             {% csrf_token %}
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputCity">Prix proposé :</label>
-                                    <input type="text" class="form-control" id="inputCity" name ="prix" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="submit" class="m-t-10 waves-effect waves-dark btn btn-success btn-md btn-rounded">
-                                </div>  
-                            </div>
+                                    <div class="form-group mb-2">
+                                      <label for="staticprix2" class="">Prix à Proposer : </label>
+                                      <input type="number"  class="form-control" id="staticprix2" value="0" name ="prix" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success mb-2">Postuler</button>
                         </form>
-
 <!--
                             <a href="{% url 'gestion_notifications:postuler' notification.id %}" class="m-t-10 waves-effect waves-dark btn btn-success btn-md btn-rounded" data-abc="true">Postuler</a>
 -->
@@ -116,7 +111,21 @@ crossorigin="anonymous">
                                     <h3 class="m-b-0 font-light">{{distance|floatformat:2}} Km</h3><small>Distance</small>
                                 </div>
                                 <div class="col-lg-4 col-md-4 m-t-20">
-                                    <h3 class="m-b-0 font-light"></h3><small>Prix</small>
+                                    {% if livreur in notification.livreurs_postule.all %}
+                                        {% for postulation in  notification.postulation.all%}
+                                            {% if  postulation.livreur == livreur %}
+                                            <h3 class="m-b-0 font-light">
+                                                <span class = "text-success">  {{ postulation.prixPropose }} Fcfa </span>
+                                            </h3><small>Prix proposé</small>
+                                                
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <h3 class="m-b-0 font-light">
+                                            <span class = "text-alerte">  50 Fcfa </span>
+                                        </h3><small>Prix par défaut</small>
+                                    {% endif %}
+
                                 </div>
                             </div>
                         </div>
