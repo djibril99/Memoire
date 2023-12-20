@@ -6,6 +6,7 @@ class Marchandise(models.Model):
         #ajouter une photo  de la marchandise
         photo =models.ImageField(upload_to='photo_marchandise/', null=True, blank=True)
         description = models.CharField(max_length=500, null=True)
+        poids = models.FloatField(null=True)
         def __str__(self):
                 return f'Marchandise de {self.client.user.prenom} {self.client.user.nom}'
         
@@ -23,7 +24,13 @@ class Livraison(models.Model):
         date_livraison = models.DateTimeField(default=timezone.now)
         #etat de la livraison boolean
         etat_livraison = models.BooleanField(default=False)
-        
+        #mode de livraison (aerien, terrestre)
+        #i y a deux valeurs possibles : aerien et terrestre
+        MODE_LIVRAISON = (
+                ('aerien', 'Aerien'),
+                ('terrestre', 'Terrestre'),
+        )
+        mode_livraison = models.CharField(max_length=10, choices=MODE_LIVRAISON, default=MODE_LIVRAISON[0][0])
         #code de validation de la livraison , par le client (une chaine de 150 caractere generée aleatoirement)
         code_validation = models.CharField(max_length=150 , null=True)
         def __str__(self):
